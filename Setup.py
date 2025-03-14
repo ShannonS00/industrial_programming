@@ -1,8 +1,6 @@
 import numba
 import numpy as np
 import matplotlib.pyplot as plt
-import pandas as pd
-import scipy
 import time
 
 def get_acceleration(X: np.ndarray) -> np.ndarray:
