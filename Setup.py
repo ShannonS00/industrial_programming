@@ -55,7 +55,10 @@ def measure_execution_time(N_values):
 
 def plot_scaling(N_values, times):
     plt.figure()
-    plt.loglog(N_values, times, marker='o', linestyle='-', label='Measured time')
+    # Generate random colors for each data point
+    colors = np.random.rand(len(N_values), 3)  # RGB colors
+    plt.loglog(N_values, times, linestyle='-', label='Measured time')
+    plt.scatter(N_values, times, c=colors, s=100, edgecolors='black', label="Random colors")
     plt.loglog(N_values, (np.array(N_values)**2) * (times[0] / N_values[0]**2), linestyle='--', label='O(N²) reference')
     plt.xlabel('Number of bodies (N)')
     plt.ylabel('Execution Time (s)')
