@@ -15,17 +15,12 @@ def get_acceleration(X: np.ndarray) -> np.ndarray:
     Returns:
         np.ndarray: 2D array of shape (N, 3) containing the accelerations of the bodies.
     """
-    N = X.shape[0]
-    A = np.zeros_like(X)  # Initialize acceleration array
-    
-    for i in range(N):
-        for j in range(N):
-            if i != j:
-                r_ij = X[j] - X[i]  # Vector from i to j
-                distance = np.linalg.norm(r_ij)
-                if distance > 0:
-                    A[i] += r_ij / distance**3  # Gravitational acceleration formula
-    
+    N = X.shape[0] 
+    A = np.array([
+        sum((X[j] - X[i]) / np.linalg.norm(X[j] - X[i])**3 
+            for j in range(N) if i != j and np.linalg.norm(X[j] - X[i]) > 0)
+        for i in range(N)
+    ])
     return A
 
 
