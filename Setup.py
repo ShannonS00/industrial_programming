@@ -55,8 +55,9 @@ def measure_execution_time(N_values):
 
 def plot_scaling(N_values, times):
     plt.figure()
-    # Generate random colors for each data point
-    colors = np.random.rand(len(N_values), 3)  # RGB colors
+    # Generate cool-toned colors using a colormap
+    cmap = plt.cm.cool  # Alternative: plt.cm.viridis, plt.cm.Blues, plt.cm.magma
+    colors = cmap(np.linspace(0, 1, len(N_values)))  # Smooth color gradient
     plt.loglog(N_values, times, linestyle='-', label='Measured time')
     plt.scatter(N_values, times, c=colors, s=100, edgecolors='black', label="Random colors")
     plt.loglog(N_values, (np.array(N_values)**2) * (times[0] / N_values[0]**2), linestyle='--', label='O(N²) reference')
