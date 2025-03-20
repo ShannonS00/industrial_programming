@@ -13,17 +13,12 @@ def get_acceleration(X: np.ndarray) -> np.ndarray:
     Returns:
         np.ndarray: 2D array of shape (N, 3) containing the accelerations of the bodies.
     """
-    N = X.shape[0]
-    A = np.zeros_like(X)  # Initialize acceleration array
-    
-    for i in range(N):
-        for j in range(N):
-            if i != j:
-                r_ij = X[j] - X[i]  # Vector from i to j
-                distance = np.linalg.norm(r_ij)
-                if distance > 0:
-                    A[i] += r_ij / distance**3  # Gravitational acceleration formula
-    
+    N = X.shape[0] 
+    A = np.array([
+        sum((X[j] - X[i]) / np.linalg.norm(X[j] - X[i])**3 
+            for j in range(N) if i != j and np.linalg.norm(X[j] - X[i]) > 0)
+        for i in range(N)
+    ])
     return A
 
 
@@ -58,7 +53,10 @@ def measure_execution_time(N_values):
 
 def plot_scaling(N_values, times):
     plt.figure()
-    plt.loglog(N_values, times, marker='o', linestyle='-', label='Measured time')
+    # Generate random colors for each data point
+    colors = np.random.rand(len(N_values), 3)  # RGB colors
+    plt.loglog(N_values, times, linestyle='-', label='Measured time')
+    plt.scatter(N_values, times, c=colors, s=100, edgecolors='black', label="Random colors")
     plt.loglog(N_values, (np.array(N_values)**2) * (times[0] / N_values[0]**2), linestyle='--', label='O(N²) reference')
     plt.xlabel('Number of bodies (N)')
     plt.ylabel('Execution Time (s)')
